@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>익명 건의함</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .anonymous-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .required {
+            color: #e74c3c;
+            margin-left: 4px;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+            line-height: 1.6;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .char-counter {
+            text-align: right;
+            color: #999;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💡 익명 건의함</h1>
+            <p>여러분의 소중한 의견을 들려주세요<br>더 나은 회사를 만들어갑니다</p>
+            <span class="anonymous-badge">🔒 완전 익명 보장</span>
+        </div>
+
+        <form id="suggestionForm">
+            <div class="form-group">
+                <label for="category">
+                    카테고리 <span class="required">*</span>
+                </label>
+                <select id="category" name="category" required>
+                    <option value="">선택해주세요</option>
+                    <option value="업무">업무</option>
+                    <option value="복지">복지</option>
+                    <option value="안전">안전</option>
+                    <option value="기타">기타</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="content">
+                    건의 내용 <span class="required">*</span>
+                </label>
+                <textarea 
+                    id="content" 
+                    name="content" 
+                    placeholder="자유롭게 의견을 작성해주세요. 익명으로 처리됩니다."
+                    maxlength="1000"
+                    required
+                ></textarea>
+                <div class="char-counter">
+                    <span id="charCount">0</span> / 1000자
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                제출하기
+            </button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+            <h3>✅ 제출 완료!</h3>
+            <p>소중한 의견 감사합니다.<br>익명으로 안전하게 접수되었습니다.</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <h3>⚠️ 제출 실패</h3>
+            <p id="errorText">문제가 발생했습니다. 잠시 후 다시 시도해주세요.</p>
+        </div>
+    </div>
+
+    <script>
+        // 구글 앱스 스크립트 웹 앱 URL을 여기에 입력하세요
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXHbHEaR3YHR2dOUNJdpXpr0EC0q3PX4GbJcghF8gcsGv7qQ0X4eqWCdbEnGKkyZSi/exec';
+
+        const form = document.getElementById('suggestionForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const contentTextarea = document.getElementById('content');
+        const charCount = document.getElementById('charCount');
+
+        // 글자 수 카운터
+        contentTextarea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            if (count > 950) {
+                charCount.style.color = '#e74c3c';
+            } else {
+                charCount.style.color = '#999';
+            }
+        });
+
+        // 폼 제출
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // URL 확인
+            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                errorText.textContent = '관리자에게 문의하세요: Google Apps Script URL이 설정되지 않았습니다.';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            const formData = {
+                category: document.getElementById('category').value,
+                content: document.getElementById('content').value,
+                timestamp: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+            };
+
+            // 버튼 비활성화
+            submitBtn.disabled = true;
+            submitBtn.textContent = '제출 중...';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                // no-cors 모드에서는 응답을 확인할 수 없으므로 성공으로 간주
+                form.style.display = 'none';
+                successMessage.classList.add('show');
+
+                // 3초 후 폼 리셋
+                setTimeout(() => {
+                    form.reset();
+                    form.style.display = 'block';
+                    successMessage.classList.remove('show');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '제출하기';
+                    charCount.textContent = '0';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error:', error);
+                errorText.textContent = '제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+                errorMessage.classList.add('show');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '제출하기';
+
+                setTimeout(() => {
+                    errorMessage.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
